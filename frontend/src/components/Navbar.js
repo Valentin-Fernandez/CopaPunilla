@@ -16,7 +16,9 @@ const Navbar = () => {
                         </Link>
                     </div>
                     <div className="text-2xl text-terciary">
-                        <RiAccountCircleFill />
+                        <Link to="/login">
+                            <RiAccountCircleFill />
+                        </Link>
                     </div>
                 </div>
             </nav>
