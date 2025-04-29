@@ -1,0 +1,76 @@
+import PartidoService from '../../../service/PartidoService.js';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+
+const PartidosDetails = () => {
+    const { id } = useParams();
+    const [partidos, setPartidos] = useState([]);
+    const [fechaLigaSeleccionada, setFechaLigaSeleccionada] = useState('');
+    const navigate = useNavigate();
+
+    const handleResultadoClick = resultadoId => {
+        navigate(`/dashboard/resultado/${resultadoId}`);
+    };
+
+    const fetchPartidos = async () => {
+        try {
+            const response = await PartidoService.getAll(id);
+            setPartidos(response);
+        } catch (error) {
+            console.error('Error fetching partidos:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchPartidos();
+    }, []);
+
+    const partidosFiltrados = fechaLigaSeleccionada ? partidos.filter(partido => partido.fechaLiga === parseInt(fechaLigaSeleccionada)) : partidos;
+
+    return (
+        <>
+            <div className="my-4">
+                <select id="fechaLiga" className="bg-secundary p-2 w-full rounded-md text-primary" value={fechaLigaSeleccionada} onChange={e => setFechaLigaSeleccionada(e.target.value)}>
+                    <option value="">Todas las fechas</option>
+                    {[...Array(10).keys()].map(num => (
+                        <option key={num + 1} value={num + 1}>
+                            Fecha {num + 1}
+                        </option>
+                    ))}
+                </select>
+            </div>
+            {partidosFiltrados.length > 0 ? (
+                partidos.map(partido => (
+                    <div className="bg-secundary rounded-md my-4 text-primary p-4">
+                        <div className="flex justify-center items-center font-bold text-lg">
+                            {partido.estado === 'finalizado' ? (
+                                <p>
+                                    {partido.equipoLocal.nombre} {partido.golesLocal} vs {partido.golesVisitante} {partido.equipoVisitante.nombre}
+                                </p>
+                            ) : (
+                                <p>
+                                    {partido.equipoLocal.nombre} vs {partido.equipoVisitante.nombre}
+                                </p>
+                            )}
+                        </div>
+                        <p className="text-center text-sm">Fecha: {new Date(partido.fecha).toLocaleDateString()}</p>
+                        <p className="text-center text-sm">Hora: {new Date(partido.fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                        {partido.estado === 'pendiente' && (
+                            <div className="flex items-center justify-center mt-2">
+                                <button className="bg-terciary rounded-md p-2" onClick={() => handleResultadoClick(partido._id)}>
+                                    Resultado
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                ))
+            ) : (
+                <div className="text-center mt-4">
+                    <h2>No hay partidos disponibles</h2>
+                </div>
+            )}
+        </>
+    );
+};
+
+export default PartidosDetails;
