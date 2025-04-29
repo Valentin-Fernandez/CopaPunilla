@@ -16,9 +16,17 @@ const PORT = 8080;
 app.use(express.json());
 app.use(cookieParser());
 // Configuración de CORS
+const allowedOrigins = ['https://copapunilla.com', 'https://www.copapunilla.com'];
+
 app.use(
     cors({
-        origin: process.env.CORS_ORIGIN, // Permite solicitudes desde este origen
+        origin: (origin, callback) => {
+            if (allowedOrigins.includes(origin) || !origin) {
+                callback(null, true); // Permite el origen
+            } else {
+                callback(new Error('No permitido por CORS')); // Bloquea el origen
+            }
+        },
         credentials: true, // Permite el envío de cookies y encabezados de autorización
     }),
 );
