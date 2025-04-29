@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthService from '../service/AuthService.js';
+import Copa from '../assets/copaserranaicon.png';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -23,12 +24,29 @@ const Login = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h1>Iniciar Sesión</h1>
-            <input type="text" placeholder="Usuario" value={username} onChange={e => setUsername(e.target.value)} />
-            <input type="password" placeholder="Contraseña" value={password} onChange={e => setPassword(e.target.value)} />
-            <button type="submit">Iniciar Sesión</button>
-        </form>
+        <div className="flex items-center justify-center h-screen bg-secundaryDark">
+            <form onSubmit={handleSubmit} className="flex flex-col justify-center items-center">
+                <img src={Copa} className="w-[15%] md:w-[10%]"></img>
+                <h1 className="font-bold text-terciary text-center text-xl mb-4">Iniciar Sesión</h1>
+                <input
+                    type="text"
+                    placeholder="Usuario"
+                    value={username}
+                    onChange={e => setUsername(e.target.value)}
+                    className="outline-none bg-transparent border border-terciary rounded-md p-2 mb-4 text-primary"
+                />
+                <input
+                    type="password"
+                    placeholder="Contraseña"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    className="outline-none bg-transparent border border-terciary rounded-md p-2 mb-4 text-primary"
+                />
+                <button type="submit" className="bg-terciary rounded-md p-2 text-primary">
+                    Iniciar
+                </button>
+            </form>
+        </div>
     );
 };
 
