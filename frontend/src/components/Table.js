@@ -37,8 +37,8 @@ const Table = ({ simplificada = false, torneo }) => {
                                 <td className="text-center py-3 px-2">{equipo.estadisticas.partidosJugados}</td>
                                 {!simplificada && (
                                     <>
-                                        <td className="text-center py-3 px-2">{equipo.estadisticas.partidosEmpatados}</td>
                                         <td className="text-center py-3 px-2">{equipo.estadisticas.partidosGanados}</td>
+                                        <td className="text-center py-3 px-2">{equipo.estadisticas.partidosEmpatados}</td>
                                         <td className="text-center py-3 px-2">{equipo.estadisticas.partidosPerdidos}</td>
                                         <td className="text-center py-3 px-2">{equipo.estadisticas.golesFavor}</td>
                                         <td className="text-center py-3 px-2">{equipo.estadisticas.golesContra}</td>
