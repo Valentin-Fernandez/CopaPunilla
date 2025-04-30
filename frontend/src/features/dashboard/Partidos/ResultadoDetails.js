@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import PartidoService from '../../../service/PartidoService.js';
 import EquipoService from '../../../service/EquipoService.js';
 import FormStats from './FormStats.js';
+import Loading from '../../../components/Loading.js';
 
 const ResultadoDetails = () => {
     const { id } = useParams();
@@ -12,6 +13,7 @@ const ResultadoDetails = () => {
     const [estadisticas, setEstadisticas] = useState([]);
     const [modalOpen, setModalOpen] = useState(false); // Estado para controlar el Modal
     const [jugadorSeleccionado, setJugadorSeleccionado] = useState(null); // Jugador seleccionado
+    const [loading, setLoading] = useState(false);
 
     const fetchPartido = async () => {
         try {
@@ -79,6 +81,7 @@ const ResultadoDetails = () => {
     };
 
     const enviarResultado = async () => {
+        setLoading(true);
         try {
             const resultado = {
                 golesLocal: partido.golesLocal,
@@ -94,13 +97,15 @@ const ResultadoDetails = () => {
             alert('Resultado enviado con éxito');
         } catch (error) {
             console.error('Error al enviar el resultado:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
         <div className="container mx-auto p-4 text-primary flex justify-center items-center flex-col">
             <h1 className="text-xl font-bold mb-4">Detalles del Resultado</h1>
-
+            {loading && <Loading message="Enviando resultado..." />}
             {/* Información del partido */}
             {partido && (
                 <div className="mb-6 text-center">
@@ -197,7 +202,7 @@ const ResultadoDetails = () => {
                 )}
             </div>
 
-            <button onClick={enviarResultado} className="bg-terciary rounded-md p-2">
+            <button onClick={enviarResultado} className="bg-terciary rounded-md p-2" disabled={loading}>
                 Enviar resultado
             </button>
 

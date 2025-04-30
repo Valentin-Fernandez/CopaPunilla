@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Modal from '../../../components/Modal.js';
 import EquipoService from '../../../service/EquipoService.js';
 import { useParams } from 'react-router-dom';
+import Loading from '../../../components/Loading.js';
 
 const FormEditEquipo = ({ isOpen, onClose, equipo, onSuccess }) => {
     const [nombre, setNombre] = useState(null);
@@ -12,11 +13,13 @@ const FormEditEquipo = ({ isOpen, onClose, equipo, onSuccess }) => {
     const [partidosEmpatados, setPartidosEmpatados] = useState(null);
     const [golesFavor, setGolesFavor] = useState(null);
     const [golesContra, setGolesContra] = useState(null);
+    const [loading, setLoading] = useState(false);
     const [diferenciaGoles, setDiferenciaGoles] = useState(null);
     const { equipoId } = useParams();
 
     const handleSubmit = async e => {
         e.preventDefault();
+        setLoading(true);
         try {
             const equipoEditado = {
                 ...(nombre && { nombre }),
@@ -37,6 +40,8 @@ const FormEditEquipo = ({ isOpen, onClose, equipo, onSuccess }) => {
             onClose();
         } catch (error) {
             console.error('Error al editar el equipo:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -44,6 +49,7 @@ const FormEditEquipo = ({ isOpen, onClose, equipo, onSuccess }) => {
         <Modal isOpen={isOpen} onClose={onClose}>
             <div className="flex flex-col justify-center items-center h-full">
                 <h2 className="text-xl text-primary mb-4">Editar Equipo</h2>
+                {loading && <Loading message="Editando equipo" />}
                 <form className="w-full max-w-md" onSubmit={handleSubmit}>
                     <input
                         type="text"
@@ -117,7 +123,7 @@ const FormEditEquipo = ({ isOpen, onClose, equipo, onSuccess }) => {
                     />
 
                     {/* Agrega más campos según sea necesario */}
-                    <button type="submit" className="bg-terciary text-white p-2 rounded-md w-full">
+                    <button type="submit" className="bg-terciary text-white p-2 rounded-md w-full" disabled={loading}>
                         Guardar
                     </button>
                 </form>

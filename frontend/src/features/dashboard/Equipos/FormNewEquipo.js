@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import EquipoService from '../../../service/EquipoService.js';
 import Modal from '../../../components/Modal.js';
+import Loading from '../../../components/Loading.js';
 
 const FormNewEquipo = ({ isOpen, onClose, torneoId, onSuccess }) => {
     const [newEquipo, setNewEquipo] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async e => {
         e.preventDefault();
+        setLoading(true);
         try {
             const equipo = {
                 nombre: newEquipo,
@@ -17,13 +20,15 @@ const FormNewEquipo = ({ isOpen, onClose, torneoId, onSuccess }) => {
             onClose();
         } catch (error) {
             console.error('Error al crear el equipo', error);
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <h2 className="text-xl font-bold mb-4 text-primary">Crear Nuevo Equipo</h2>
-
+            {loading && <Loading message="Creando equipo..." />}
             {/* Formulario */}
             <form onSubmit={handleSubmit}>
                 <input
@@ -33,7 +38,7 @@ const FormNewEquipo = ({ isOpen, onClose, torneoId, onSuccess }) => {
                     value={newEquipo}
                     onChange={e => setNewEquipo(e.target.value)}
                 />
-                <button type="submit" className="bg-terciary text-white p-2 rounded-md w-full">
+                <button type="submit" className="bg-terciary text-white p-2 rounded-md w-full" disabled={loading}>
                     Guardar
                 </button>
             </form>

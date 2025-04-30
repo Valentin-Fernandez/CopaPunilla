@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import PartidoService from '../../../service/PartidoService.js';
 import Modal from '../../../components/Modal.js';
+import Loading from '../../../components/Loading.js';
 
 const FormNewPartido = ({ isOpen, onClose, torneoId, equipos }) => {
     const [selectEquipoLocal, setSelectEquipoLocal] = useState('');
     const [selectEquipoVisitante, setSelectEquipoVisitante] = useState('');
     const [selectFechaLiga, setSelectFechaLiga] = useState('');
     const [selectFecha, setSelectFecha] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async e => {
         e.preventDefault();
+        setLoading(true);
         try {
             const partido = {
                 torneo: torneoId,
@@ -23,12 +26,15 @@ const FormNewPartido = ({ isOpen, onClose, torneoId, equipos }) => {
             onClose();
         } catch (error) {
             console.error('Error al crear el partido', error);
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <h2 className="text-xl font-bold mb-4 text-primary text-center">Crear partido</h2>
+            {loading && <Loading message="Creando partido..." />}
             <select
                 className="border p-2 w-full my-4 border-terciary rounded-md outline-none text-zinc-500 bg-transparent"
                 value={selectEquipoLocal}
@@ -73,7 +79,7 @@ const FormNewPartido = ({ isOpen, onClose, torneoId, equipos }) => {
                     </option>
                 ))}
             </select>
-            <button className="bg-terciary text-white p-2 rounded-md w-full" onClick={handleSubmit}>
+            <button className="bg-terciary text-white p-2 rounded-md w-full" onClick={handleSubmit} disabled={loading}>
                 Guardar
             </button>
         </Modal>

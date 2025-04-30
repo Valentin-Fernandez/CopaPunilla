@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import JugadorService from '../../../service/JugadorService.js';
 import Modal from '../../../components/Modal.js';
+import Loading from '../../../components/Loading.js';
 
 const FormNewJugador = ({ isOpen, torneoId, equipos, onClose }) => {
     const [newJugador, setNewJugador] = useState('');
     const [dni, setDni] = useState('');
     const [selectEquipo, setSelectEquipo] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async e => {
         e.preventDefault();
+        setLoading(true);
         try {
             const jugador = {
                 nombre: newJugador,
@@ -20,13 +23,15 @@ const FormNewJugador = ({ isOpen, torneoId, equipos, onClose }) => {
             onClose();
         } catch (error) {
             console.error('Error al crear el jugador');
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <h2 className="text-xl font-bold mb-4 text-primary text-center">Crear nuevo jugador</h2>
-
+            {loading && <Loading message="Creando jugador..." />}
             <select className="border p-2 w-full my-4 border-terciary rounded-md outline-none bg-transparent text-zinc-500" value={selectEquipo} onChange={e => setSelectEquipo(e.target.value)}>
                 <option value="" disabled>
                     Selecciona un equipo
@@ -52,7 +57,7 @@ const FormNewJugador = ({ isOpen, torneoId, equipos, onClose }) => {
                     value={dni}
                     onChange={e => setDni(e.target.value)}
                 />
-                <button type="submit" className="bg-terciary text-white p-2 rounded-md w-full">
+                <button type="submit" className="bg-terciary text-white p-2 rounded-md w-full" disabled={loading}>
                     Guardar
                 </button>
             </form>

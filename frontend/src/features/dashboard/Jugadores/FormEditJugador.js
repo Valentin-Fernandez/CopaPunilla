@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Modal from '../../../components/Modal';
 import JugadorService from '../../../service/JugadorService.js';
 import { useParams } from 'react-router-dom';
+import Loading from '../../../components/Loading.js';
 
 const FormEditJugador = ({ isOpen, onClose, jugador, onSuccess }) => {
     const [nombre, setNombre] = useState(null);
@@ -9,10 +10,12 @@ const FormEditJugador = ({ isOpen, onClose, jugador, onSuccess }) => {
     const [goles, setGoles] = useState(null);
     const [tarjetasAmarillas, setTarjetasAmarillas] = useState(null);
     const [tarjetasRojas, setTarjetasRojas] = useState(null);
+    const [loading, setLoading] = useState(false);
     const { equipoId } = useParams();
 
     const handleSubmit = async e => {
         e.preventDefault();
+        setLoading(true);
         try {
             const jugadorEdit = {
                 ...(nombre && { nombre }), // Si el nombre fue modificado, inclúyelo
@@ -29,12 +32,15 @@ const FormEditJugador = ({ isOpen, onClose, jugador, onSuccess }) => {
             onSuccess(equipoId);
         } catch (error) {
             console.error('Error al editar el jugador:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <h2 className="text-xl font-bold mb-4 text-primary text-center">Editar Jugador</h2>
+            {loading && <Loading message="Guardando..." />}
             <form onSubmit={handleSubmit} className="flex flex-col">
                 <input
                     type="text"
@@ -67,7 +73,7 @@ const FormEditJugador = ({ isOpen, onClose, jugador, onSuccess }) => {
                     placeholder={`Rojas ${jugador.estadisticas.tarjetasRojas}`}
                     onChange={e => setTarjetasRojas(e.target.value)}
                 />
-                <button type="submit" className="bg-terciary text-white p-2 rounded-md w-full">
+                <button type="submit" className="bg-terciary text-white p-2 rounded-md w-full" disabled={loading}>
                     Guardar
                 </button>
             </form>
