@@ -99,7 +99,7 @@ export default class PartidoRepository {
                 equipoLocal.estadisticas.puntos += 2;
                 equipoLocal.estadisticas.partidosGanados += 1;
                 equipoVisitante.estadisticas.partidosPerdidos += 1;
-            } else if (findPartido.golesLocal < findPartido.golesVisitante) {
+            } else if (partidoBody.golesLocal < partidoBody.golesVisitante) {
                 equipoVisitante.estadisticas.puntos += 2;
                 equipoVisitante.estadisticas.partidosGanados += 1;
                 equipoLocal.estadisticas.partidosPerdidos += 1;
