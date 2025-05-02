@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 const PartidosDetails = () => {
     const { id } = useParams();
     const [partidos, setPartidos] = useState([]);
-    const [fechaLigaSeleccionada, setFechaLigaSeleccionada] = useState('');
+    const [fechaLigaSeleccionada, setFechaLigaSeleccionada] = useState(1);
     const navigate = useNavigate();
 
     const handleResultadoClick = resultadoId => {
@@ -30,17 +30,24 @@ const PartidosDetails = () => {
     return (
         <>
             <div className="my-4">
-                <select id="fechaLiga" className="bg-secundary p-2 w-full rounded-md text-primary" value={fechaLigaSeleccionada} onChange={e => setFechaLigaSeleccionada(e.target.value)}>
-                    <option value="">Todas las fechas</option>
-                    {[...Array(10).keys()].map(num => (
-                        <option key={num + 1} value={num + 1}>
-                            Fecha {num + 1}
-                        </option>
-                    ))}
-                </select>
+                <div className="flex items-center justify-center">
+                    <select
+                        id="fechaLiga"
+                        className="bg-secundary px-4 py-2 rounded-md text-primary outline-none border-2 border-secundaryDark"
+                        value={fechaLigaSeleccionada}
+                        onChange={e => setFechaLigaSeleccionada(e.target.value)}
+                    >
+                        <option value="">Todas las fechas</option>
+                        {[...Array(7).keys()].map(num => (
+                            <option key={num + 1} value={num + 1}>
+                                Fecha {num + 1}
+                            </option>
+                        ))}
+                    </select>
+                </div>
             </div>
             {partidosFiltrados.length > 0 ? (
-                partidos.map(partido => (
+                partidosFiltrados.map(partido => (
                     <div className="bg-secundary rounded-md my-4 text-primary p-4">
                         <div className="flex justify-center items-center font-bold text-lg">
                             {partido.estado === 'finalizado' ? (

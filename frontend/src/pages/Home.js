@@ -21,8 +21,21 @@ const Home = () => {
 
     return (
         <div className="">
-            {torneo && <Table torneo={torneo} />}
-            {torneo && <Goals torneoId={torneo._id} />}
+            <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 items-center md:my-20 my-10">
+                {/* Tabla principal (ocupa 2 columnas en pantallas medianas y grandes) */}
+                {torneo && (
+                    <div className="md:col-span-2">
+                        <Table torneo={torneo} />
+                    </div>
+                )}
+                {/* Tabla de goleadores (ocupa 1 columna) */}
+                {torneo && (
+                    <div className="md:col-span-1">
+                        <Goals torneoId={torneo._id} />
+                    </div>
+                )}
+            </div>
+            {/* Encuentros debajo de las tablas */}
             {torneo && <Encuentros torneoId={torneo._id} />}
             <Footer />
         </div>

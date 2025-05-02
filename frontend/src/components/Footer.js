@@ -12,7 +12,7 @@ const Footer = () => {
                 </div>
             </div>
             <footer className="text-sm">
-                <p>© 2025 Copa Serrana. Todos los derechos reservados.</p>
+                <p>© 2025 Copa Punilla. Todos los derechos reservados.</p>
             </footer>
         </div>
     );

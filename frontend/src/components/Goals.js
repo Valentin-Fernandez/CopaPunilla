@@ -17,26 +17,24 @@ const Goals = ({ torneoId }) => {
     }, [torneoId]);
 
     return (
-        <div className="container mx-auto my-16">
+        <div className="mt-10 sm:mt-0">
             <div className="flex items-center justify-center">
-                <div className="w-[80%] md:w-[40%] rounded-xl shadow-lg text-sm text-secundary">
-                    <h2 className="px-6 py-2 text-base font-semibold ">
-                        Tabla de goleadores<span className="font-extralight text-xs"> - Categoria libre</span>
-                    </h2>
+                <div className="rounded-xl shadow-lg text-sm text-secundary">
+                    <h2 className="px-6 py-2 text-base font-semibold ">Tabla de goleadores</h2>
                     <table className="shadow-md w-full">
                         <thead className="border-t shadow-sm border-terciary">
                             <tr className="shadow-sm">
                                 {/* <th className="py-3">#</th> */}
-                                <th className="py-3">Jugador</th>
-                                <th className="py-3">Goles</th>
+                                <th className="p-4">Jugador</th>
+                                <th className="p-4">Goles</th>
                             </tr>
                         </thead>
-                        <tbody className="">
+                        <tbody className="text-base">
                             {jugadores.map(jugador => (
                                 <tr key={jugador._id} className="shadow-sm">
                                     {/* <td className="text-center py-3 px-2">{jugador.posicion}</td> */}
-                                    <td className="text-center py-3 px-2">{jugador.nombre}</td>
-                                    <td className="text-center py-3 px-2">{jugador.estadisticas.goles}</td>
+                                    <td className="text-center p-4">{jugador.nombre}</td>
+                                    <td className="text-center p-4">{jugador.estadisticas.goles}</td>
                                 </tr>
                             ))}
                         </tbody>

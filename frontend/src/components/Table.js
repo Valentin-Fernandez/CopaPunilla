@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 
 const Table = ({ simplificada = false, torneo }) => {
     return (
-        <div className="container mx-auto px-4">
+        <div className="px-4">
             <div className="overflow-x-auto text-sm  rounded-xl shadow-md text-secundary">
-                <h2 className="px-6 py-2 text-base font-semibold ">Tabla de posiciones {!simplificada && <span className="font-extralight text-xs">{torneo.nombre}</span>}</h2>
-                <table className="min-w-full">
+                <h2 className="px-6 py-2 text-lg font-semibold ">Tabla de posiciones {!simplificada && <span className="font-extralight text-xs">{torneo.nombre}</span>}</h2>
+                <table className="w-full">
                     <thead className="border-t shadow-sm border-terciary">
                         <tr className="shadow-sm">
                             {/* <th className="py-3">#</th> */}
@@ -25,7 +25,7 @@ const Table = ({ simplificada = false, torneo }) => {
                             <th className="py-3">Pts</th>
                         </tr>
                     </thead>
-                    <tbody className="">
+                    <tbody className="text-base">
                         {torneo.equipos.map(equipo => (
                             <tr key={equipo._id} className="shadow-sm">
                                 {/* <td className="text-center py-3 px-2">{equipo.posicion}</td> */}

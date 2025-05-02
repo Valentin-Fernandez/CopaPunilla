@@ -5,7 +5,7 @@ import { RiAccountCircleFill } from 'react-icons/ri';
 const Navbar = () => {
     return (
         <div className="">
-            <nav className="shadow-md p-4 mb-10">
+            <nav className="shadow-md p-4 mb-10 ">
                 <div className="container mx-auto flex justify-between items-center">
                     <Link to="/">
                         <img src={Icon} className="max-w-12"></img>

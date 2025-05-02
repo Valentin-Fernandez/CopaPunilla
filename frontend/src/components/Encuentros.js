@@ -22,7 +22,7 @@ const Encuentros = ({ torneoId }) => {
     return (
         <div className="bg-terciary py-16">
             <div className="container mx-auto flex items-center justify-center flex-col bg-terciary">
-                <div className="w-[80%] rounded-xl shadow-lg text-sm text-primary bg-secundary">
+                <div className="w-[70%] rounded-xl shadow-lg text-sm text-primary bg-secundary">
                     <h2 className="px-6 py-2 text-base font-bold text-terciary ">Encuentros</h2>
                     <div className="w-[50%] mx-auto">
                         <select
