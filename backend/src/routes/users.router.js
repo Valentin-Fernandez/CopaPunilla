@@ -4,7 +4,7 @@ import { Router } from 'express';
 import { protect } from '../middleware/auth.middleware.js';
 const router = Router();
 
-router.post('/register', UsersController.registerUser);
+/* router.post('/register', UsersController.registerUser); */
 router.post('/login', UsersController.loginUser);
 // Ruta para verificar si el usuario está logueado
 router.get('/check', protect, (req, res) => {

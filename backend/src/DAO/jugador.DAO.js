@@ -26,6 +26,6 @@ export default class JugadorDAO {
     }
 
     static async getGoleadores(id) {
-        return await Jugador.find({ torneo: id }).sort({ 'estadisticas.goles': -1 }).limit(10);
+        return await Jugador.find({ torneo: id }).sort({ 'estadisticas.goles': -1 }).limit(5);
     }
 }
