@@ -20,7 +20,7 @@ const EquipoDetailsHome = () => {
     }, []);
 
     return (
-        <div className="container mx-auto h-screen">
+        <div className="container mx-auto h-screen overflow-x-auto">
             {equipo ? (
                 <div className="my-8 mx-8">
                     <div className="flex items-center justify-between mb-4">
