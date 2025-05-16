@@ -2,6 +2,7 @@ import { useState } from 'react';
 import PartidoService from '../../../service/PartidoService.js';
 import Modal from '../../../components/Modal.js';
 import Loading from '../../../components/Loading.js';
+import { toast } from 'react-toastify';
 
 const FormNewPartido = ({ isOpen, onClose, torneoId, equipos }) => {
     const [selectEquipoLocal, setSelectEquipoLocal] = useState('');
@@ -22,10 +23,22 @@ const FormNewPartido = ({ isOpen, onClose, torneoId, equipos }) => {
                 fechaLiga: selectFechaLiga,
             };
             await PartidoService.create(partido);
-            alert('Partido creado');
+
             onClose();
+            toast.success('Partido creado correctamente', {
+                position: 'bottom-left',
+                autoClose: 2000,
+                hideProgressBar: false,
+                theme: 'dark',
+            });
         } catch (error) {
             console.error('Error al crear el partido', error);
+            toast.error('Error al crear el partido', {
+                position: 'bottom-left',
+                autoClose: 2000,
+                hideProgressBar: false,
+                theme: 'dark',
+            });
         } finally {
             setLoading(false);
         }
@@ -34,14 +47,10 @@ const FormNewPartido = ({ isOpen, onClose, torneoId, equipos }) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <h2 className="text-xl font-bold mb-4 text-primary text-center">Crear partido</h2>
-            {loading && <Loading message="Creando partido..." />}
-            <select
-                className="border p-2 w-full my-4 border-terciary rounded-md outline-none text-zinc-500 bg-transparent"
-                value={selectEquipoLocal}
-                onChange={e => setSelectEquipoLocal(e.target.value)}
-            >
+            <h5 className="text-primary text-center">Equipo Local</h5>
+            <select className="border p-2 w-full my-4 border-terciary rounded-md outline-none text-primary bg-secundary" value={selectEquipoLocal} onChange={e => setSelectEquipoLocal(e.target.value)}>
                 <option value="" disabled>
-                    Selecciona equipo Local
+                    Selecciona equipo local
                 </option>
                 {equipos?.map(equipo => (
                     <option key={equipo.id} value={equipo.id}>
@@ -49,8 +58,9 @@ const FormNewPartido = ({ isOpen, onClose, torneoId, equipos }) => {
                     </option>
                 ))}
             </select>
+            <h5 className="text-primary text-center">Equipo Visitante</h5>
             <select
-                className="border p-2 w-full my-4 border-terciary rounded-md outline-none text-zinc-500 bg-transparent"
+                className="border p-2 w-full my-4 border-terciary rounded-md outline-none text-primary bg-secundary"
                 value={selectEquipoVisitante}
                 onChange={e => setSelectEquipoVisitante(e.target.value)}
             >
@@ -63,13 +73,15 @@ const FormNewPartido = ({ isOpen, onClose, torneoId, equipos }) => {
                     </option>
                 ))}
             </select>
+            <h5 className="text-primary text-center">Fecha partido</h5>
             <input
                 type="datetime-local"
-                className="border p-2 w-full my-4 border-terciary rounded-md outline-none text-zinc-500 bg-transparent"
+                className="border p-2 w-full my-4 border-terciary rounded-md outline-none text-primary bg-secundary"
                 onChange={e => setSelectFecha(e.target.value)}
                 value={selectFecha}
             />
-            <select className="border p-2 w-full my-4 border-terciary rounded-md outline-none text-zinc-500 bg-transparent" onChange={e => setSelectFechaLiga(e.target.value)} value={selectFechaLiga}>
+            <h5 className="text-primary text-center">Fecha liga</h5>
+            <select className="border p-2 w-full my-4 border-terciary rounded-md outline-none text-primary bg-secundary" onChange={e => setSelectFechaLiga(e.target.value)} value={selectFechaLiga}>
                 <option value="" disabled>
                     Fecha liga
                 </option>
@@ -82,6 +94,7 @@ const FormNewPartido = ({ isOpen, onClose, torneoId, equipos }) => {
             <button className="bg-terciary text-white p-2 rounded-md w-full" onClick={handleSubmit} disabled={loading}>
                 Guardar
             </button>
+            {loading && <Loading />}
         </Modal>
     );
 };

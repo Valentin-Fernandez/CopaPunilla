@@ -8,6 +8,7 @@ import EquiposList from '../Equipos/EquiposList.js';
 import { FaLongArrowAltDown } from 'react-icons/fa';
 import { FaLongArrowAltUp } from 'react-icons/fa';
 import PartidosDetails from '../Partidos/PartidosDetails.js';
+import Button from '../../../components/Button.js';
 
 const TorneoDetails = () => {
     const { id } = useParams();
@@ -44,7 +45,7 @@ const TorneoDetails = () => {
             <div className="mt-4">
                 <div className="container mx-auto rounded-lg">
                     {torneo && (
-                        <div className="p-8 text-primary">
+                        <div className="p-8 text-secundary">
                             <div className="flex justify-between items-center">
                                 <div>
                                     <h4 className="font-bold text-2xl">
@@ -58,21 +59,15 @@ const TorneoDetails = () => {
                             </div>
                             <div>
                                 <div className="flex justify-center gap-6 mb-6">
-                                    <button className="bg-secundaryDark rounded-md text-primary text-sm p-2" onClick={openEquipoForm}>
-                                        Crear equipo
-                                    </button>
-                                    <button className="bg-secundaryDark rounded-md text-primary text-sm p-2" onClick={openJugadorForm}>
-                                        Crear jugador
-                                    </button>
-                                    <button className="bg-secundaryDark rounded-md text-primary text-sm p-2" onClick={openPartidoForm}>
-                                        Crear partido
-                                    </button>
+                                    <Button onClick={openEquipoForm} color={'bg-secundaryDark'} textColor={'text-primary'} label={'Crear equipo'} />
+                                    <Button onClick={openJugadorForm} color={'bg-secundaryDark'} textColor={'text-primary'} label={'Crear jugador'} />
+                                    <Button onClick={openPartidoForm} color={'bg-secundaryDark'} textColor={'text-primary'} label={'Crear partido'} />
                                 </div>
                                 <EquiposList equipos={torneo.equipos} />
                                 {/* Partidos */}
                                 <div className=" bg-terciary rounded-md p-4 mt-6 mb-6">
                                     <div className="flex justify-between items-center">
-                                        <h4 className="font-bold text-xl">Partidos</h4>
+                                        <h4 className="font-bold text-2xl text-primary">Partidos</h4>
                                         {partidos ? (
                                             <FaLongArrowAltUp className="text-primary text-xl" onClick={closePartidos} />
                                         ) : (

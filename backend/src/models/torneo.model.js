@@ -11,8 +11,13 @@ const torneoSchema = new mongoose.Schema({
 
     faseEliminatoria: {
         activo: { type: Boolean, default: false },
-        equiposClasificados: { type: mongoose.Schema.Types.ObjectId, ref: 'Equipo' },
-        partidosEliminacion: { type: mongoose.Schema.Types.ObjectId, ref: 'Partido' },
+        equiposClasificados: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Equipo' }],
+        partidosEliminacion: [
+            {
+                ronda: { type: String, enum: ['octavos', 'cuartos', 'semifinal', 'final'] },
+                partido: { type: mongoose.Schema.Types.ObjectId, ref: 'Partido' },
+            },
+        ],
     },
 
     destacado: { type: Boolean, default: false },

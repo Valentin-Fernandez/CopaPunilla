@@ -26,7 +26,7 @@ const FormStats = ({ onClose, jugador, onSave, isOpen }) => {
 
     return (
         <Modal onClose={onClose} isOpen={isOpen}>
-            <div className="p-6">
+            <div className="p-6 text-primary">
                 <h2 className="text-lg font-bold mb-4">Estadísticas de {jugador.nombre}</h2>
                 <div className="mb-4">
                     <label className="block text-sm font-medium text-primary">Goles</label>

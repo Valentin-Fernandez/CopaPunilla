@@ -7,8 +7,8 @@ const Footer = () => {
             <div className="flex items-center flex-col justify-center">
                 <h2 className="text-lg">Sponsored By</h2>
                 <div className="flex items-center justify-center">
-                    <img src={Elencuentro} className="max-w-16"></img>
-                    <img src={Cuevabar} className="max-w-16"></img>
+                    <img src={Elencuentro} className="max-w-16" alt="El Encuentro"></img>
+                    <img src={Cuevabar} className="max-w-16" alt="Cueva Bar"></img>
                 </div>
             </div>
             <footer className="text-sm">

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import EquipoService from '../../../service/EquipoService.js';
 import Modal from '../../../components/Modal.js';
 import Loading from '../../../components/Loading.js';
+import { toast } from 'react-toastify';
 
 const FormNewEquipo = ({ isOpen, onClose, torneoId, onSuccess }) => {
     const [newEquipo, setNewEquipo] = useState('');
@@ -18,8 +19,20 @@ const FormNewEquipo = ({ isOpen, onClose, torneoId, onSuccess }) => {
             await EquipoService.create(equipo);
             onSuccess();
             onClose();
+            toast.success('Equipo creado correctamente', {
+                position: 'bottom-left',
+                autoClose: 2000,
+                hideProgressBar: false,
+                theme: 'dark',
+            });
         } catch (error) {
             console.error('Error al crear el equipo', error);
+            toast.error('Error al crear el equipo', {
+                position: 'bottom-left',
+                autoClose: 2000,
+                hideProgressBar: false,
+                theme: 'dark',
+            });
         } finally {
             setLoading(false);
         }
@@ -28,7 +41,6 @@ const FormNewEquipo = ({ isOpen, onClose, torneoId, onSuccess }) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <h2 className="text-xl font-bold mb-4 text-primary">Crear Nuevo Equipo</h2>
-            {loading && <Loading message="Creando equipo..." />}
             {/* Formulario */}
             <form onSubmit={handleSubmit}>
                 <input
@@ -42,6 +54,7 @@ const FormNewEquipo = ({ isOpen, onClose, torneoId, onSuccess }) => {
                     Guardar
                 </button>
             </form>
+            {loading && <Loading />}
         </Modal>
     );
 };

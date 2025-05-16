@@ -34,7 +34,7 @@ const EquipoDetails = () => {
             {equipo ? (
                 <div className="my-8 mx-8">
                     <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-xl text-primary">{equipo.nombre}</h2>
+                        <h2 className="text-xl text-secundary">{equipo.nombre}</h2>
                         <div className="space-x-4">
                             <button className="bg-secundaryDark rounded-md text-primary text-sm p-2" onClick={handleEdit}>
                                 Editar

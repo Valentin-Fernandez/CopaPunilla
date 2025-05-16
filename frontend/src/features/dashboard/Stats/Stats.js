@@ -19,13 +19,13 @@ const Stats = () => {
     return (
         <>
             {stats && (
-                <div className="grid grid-cols-2 container mx-auto w-[90%] gap-4 mb-8 md:flex md:items-center md:justify-center mt-8">
+                <div className="grid grid-cols-2 container mx-auto gap-4 md:flex md:items-center md:justify-center px-4 md:px-0 my-16">
                     {Object.keys(stats).map(key => {
                         const value = stats[key];
                         return (
-                            <div key={key} className="px-2 py-4 border rounded-2xl bg-terciary text-primary text-center md:p-8 md:w-[200px] shadow-md">
-                                <h3 className="text-2xl font-bold capitalize">{key}</h3>
-                                <p className="text-2xl font-bold">{value}</p>
+                            <div key={key} className="px-2 py-4 border rounded-2xl bg-secundary text-primary text-center md:p-8 md:w-full shadow-md">
+                                <h3 className="text-3xl font-bold capitalize">{key}</h3>
+                                <p className="text-3xl font-bold text-primary">{value}</p>
                             </div>
                         );
                     })}

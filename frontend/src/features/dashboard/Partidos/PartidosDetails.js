@@ -1,6 +1,7 @@
 import PartidoService from '../../../service/PartidoService.js';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import Button from '../../../components/Button.js';
 
 const PartidosDetails = () => {
     const { id } = useParams();
@@ -46,31 +47,35 @@ const PartidosDetails = () => {
                     </select>
                 </div>
             </div>
+
             {partidosFiltrados.length > 0 ? (
-                partidosFiltrados.map(partido => (
-                    <div className="bg-secundary rounded-md my-4 text-primary p-4">
-                        <div className="flex justify-center items-center font-bold text-lg">
-                            {partido.estado === 'finalizado' ? (
-                                <p>
-                                    {partido.equipoLocal.nombre} {partido.golesLocal} vs {partido.golesVisitante} {partido.equipoVisitante.nombre}
-                                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 md:gap-4 gap-2 md:w-[60%] md:mx-auto">
+                    {partidosFiltrados.map(partido => (
+                        <div className="bg-secundary rounded-md my-4 text-primary p-6 flex flex-col justify-center items-center">
+                            <div className="flex justify-center items-center font-bold text-xl">
+                                {partido.estado === 'finalizado' ? (
+                                    <p>
+                                        {partido.equipoLocal.nombre} <span className="text-terciary">{partido.golesLocal}</span> vs <span className="text-terciary">{partido.golesVisitante}</span>{' '}
+                                        {partido.equipoVisitante.nombre}
+                                    </p>
+                                ) : (
+                                    <p>
+                                        {partido.equipoLocal.nombre} <span className="text-terciary">vs</span> {partido.equipoVisitante.nombre}
+                                    </p>
+                                )}
+                            </div>
+                            <p className="text-center text-base">Fecha: {new Date(partido.fecha).toLocaleDateString()}</p>
+                            <p className="text-center text-base">Hora: {new Date(partido.fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                            {partido.estado === 'pendiente' ? (
+                                <div className="flex items-center justify-center mt-2">
+                                    <Button onClick={() => handleResultadoClick(partido._id)} color={'bg-secundaryDark'} textColor={'text-primary'} label={'Resultado'} />
+                                </div>
                             ) : (
-                                <p>
-                                    {partido.equipoLocal.nombre} vs {partido.equipoVisitante.nombre}
-                                </p>
+                                <p className="text-sm text-terciary">Finalizado</p>
                             )}
                         </div>
-                        <p className="text-center text-sm">Fecha: {new Date(partido.fecha).toLocaleDateString()}</p>
-                        <p className="text-center text-sm">Hora: {new Date(partido.fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
-                        {partido.estado === 'pendiente' && (
-                            <div className="flex items-center justify-center mt-2">
-                                <button className="bg-terciary rounded-md p-2" onClick={() => handleResultadoClick(partido._id)}>
-                                    Resultado
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                ))
+                    ))}
+                </div>
             ) : (
                 <div className="text-center mt-4">
                     <h2>No hay partidos disponibles</h2>

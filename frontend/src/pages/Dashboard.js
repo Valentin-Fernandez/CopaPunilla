@@ -3,7 +3,7 @@ import Torneos from '../features/dashboard/Torneos/Torneos.js';
 
 const Dashboard = () => {
     return (
-        <div className="">
+        <div className="container mx-auto mb-10">
             <Stats />
             <Torneos />
         </div>

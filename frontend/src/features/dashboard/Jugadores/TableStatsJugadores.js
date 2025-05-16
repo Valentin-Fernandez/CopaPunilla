@@ -36,10 +36,10 @@ const TableStatsJugadores = ({ jugadores, onSuccess }) => {
     };
 
     return (
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto bg-primary rounded-md shadow-md">
             <table className="w-full">
                 <thead>
-                    <tr className="bg-secundaryDark text-primary text-sm font-bold uppercase">
+                    <tr className=" text-secundary text-sm font-bold uppercase">
                         <th className="p-2 text-center">Nombre</th>
                         <th className="p-2 text-center">Goles</th>
                         <th className="p-2 text-center">Amarillas</th>
@@ -48,7 +48,7 @@ const TableStatsJugadores = ({ jugadores, onSuccess }) => {
                         <th className="p-2 text-center">Acciones</th>
                     </tr>
                     {jugadores.map(jugador => (
-                        <tr key={jugador._id} className="bg-secundary text-primary text-sm">
+                        <tr key={jugador._id} className=" text-secundary text-sm bg-gray-50 odd:bg-primary">
                             <td className="p-2 text-center">{jugador.nombre}</td>
                             <td className="p-2 text-center">{jugador.estadisticas.goles}</td>
                             <td className="p-2 text-center">{jugador.estadisticas.tarjetasAmarillas}</td>

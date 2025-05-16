@@ -37,7 +37,7 @@ const EquipoDetailsHome = () => {
                                     <th className="p-2 text-center">Activo</th>
                                 </tr>
                                 {equipo.jugadores.map(jugador => (
-                                    <tr key={jugador._id} className="text-secundary text-sm">
+                                    <tr key={jugador._id} className="text-secundary text-sm bg-gray-50 odd:bg-primary">
                                         <td className="p-2 text-center">{jugador.nombre}</td>
                                         <td className="p-2 text-center">{jugador.estadisticas.goles}</td>
                                         <td className="p-2 text-center">{jugador.estadisticas.tarjetasAmarillas}</td>
