@@ -26,30 +26,45 @@ const Table = ({ simplificada = false, torneo }) => {
                         </tr>
                     </thead>
                     <tbody className="text-base">
-                        {torneo.equipos.map(equipo => (
-                            <tr key={equipo._id} className="shadow-sm">
-                                {/* <td className="text-center py-3 px-2">{equipo.posicion}</td> */}
-                                <td className="text-center py-3 px-2">
-                                    <Link to={`/equipo/${equipo._id}`} className="border-b border-terciary">
-                                        {equipo.nombre}
-                                    </Link>
-                                </td>
-                                <td className="text-center py-3 px-2">{equipo.estadisticas.partidosJugados}</td>
-                                {!simplificada && (
-                                    <>
-                                        <td className="text-center py-3 px-2">{equipo.estadisticas.partidosGanados}</td>
-                                        <td className="text-center py-3 px-2">{equipo.estadisticas.partidosEmpatados}</td>
-                                        <td className="text-center py-3 px-2">{equipo.estadisticas.partidosPerdidos}</td>
-                                        <td className="text-center py-3 px-2">{equipo.estadisticas.golesFavor}</td>
-                                        <td className="text-center py-3 px-2">{equipo.estadisticas.golesContra}</td>
-                                        <td className="text-center py-3 px-2">{equipo.estadisticas.diferenciaGoles}</td>
-                                    </>
-                                )}
-                                <td className="text-center py-3 px-2 font-bold">{equipo.estadisticas.puntos}</td>
-                            </tr>
-                        ))}
+                        {torneo.equipos.map((equipo, index) => {
+                            let style = {};
+                            if (index < 2) {
+                                style = { borderLeft: '4px solid #b14624' };
+                            } else if (index < 6) {
+                                style = { borderLeft: '4px solid #00bfff' };
+                            }
+
+                            return (
+                                <tr key={equipo._id} className="shadow-sm" style={style}>
+                                    {/* <td className="text-center py-3 px-2">{equipo.posicion}</td> */}
+                                    <td className="text-center py-3 px-2">
+                                        <Link to={`/equipo/${equipo._id}`} className="border-b border-terciary">
+                                            {equipo.nombre}
+                                        </Link>
+                                    </td>
+                                    <td className="text-center py-3 px-2">{equipo.estadisticas.partidosJugados}</td>
+                                    {!simplificada && (
+                                        <>
+                                            <td className="text-center py-3 px-2">{equipo.estadisticas.partidosGanados}</td>
+                                            <td className="text-center py-3 px-2">{equipo.estadisticas.partidosEmpatados}</td>
+                                            <td className="text-center py-3 px-2">{equipo.estadisticas.partidosPerdidos}</td>
+                                            <td className="text-center py-3 px-2">{equipo.estadisticas.golesFavor}</td>
+                                            <td className="text-center py-3 px-2">{equipo.estadisticas.golesContra}</td>
+                                            <td className="text-center py-3 px-2">{equipo.estadisticas.diferenciaGoles}</td>
+                                        </>
+                                    )}
+                                    <td className="text-center py-3 px-2 font-bold">{equipo.estadisticas.puntos}</td>
+                                </tr>
+                            );
+                        })}
                     </tbody>
                 </table>
+                <div className="flex gap-3 items-center px-6 py-4 text-xs">
+                    <div className="w-3 h-3 bg-terciary rounded-full"></div>
+                    <span>Semifinalistas</span>
+                    <div className="w-3 h-3 bg-[#00bfff] rounded-full"></div>
+                    <span>Repechaje</span>
+                </div>
             </div>
         </div>
     );
