@@ -29,7 +29,13 @@ export default class TorneoDAO {
             .populate({ path: 'partidos', select: 'equipoLocal equipoVisitante golesLocal golesVisitante fecha fechaLiga estado' });
 
         if (torneo && torneo.equipos.length > 0) {
-            torneo.equipos = torneo.equipos.sort((a, b) => b.estadisticas.puntos - a.estadisticas.puntos);
+            torneo.equipos = torneo.equipos.sort((a, b) => {
+                if (b.estadisticas.puntos !== a.estadisticas.puntos) {
+                    return b.estadisticas.puntos - a.estadisticas.puntos;
+                }
+
+                return (b.estadisticas.diferenciaGoles || 0) - (a.estadisticas.diferenciaGoles || 0);
+            });
         }
         return torneo;
     }
