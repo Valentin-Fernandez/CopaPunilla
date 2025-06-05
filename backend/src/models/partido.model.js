@@ -6,8 +6,8 @@ const partidoSchema = new mongoose.Schema({
     equipoVisitante: { type: mongoose.Schema.Types.ObjectId, ref: 'Equipo', required: true },
     golesLocal: { type: Number, default: 0 },
     golesVisitante: { type: Number, default: 0 },
-    fechaLiga: { type: Number, required: true },
-    fecha: { type: Date, required: true },
+    fechaLiga: { type: Number },
+    fecha: { type: Date },
     estado: { type: String, enum: ['pendiente', 'jugado'], default: 'pendiente' },
     estadisticas: [
         {

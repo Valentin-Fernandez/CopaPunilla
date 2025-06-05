@@ -18,4 +18,13 @@ guardar goleadores del torneo top 5 )
 router.put('/:id/finalizar', TorneoController.finalizar); 
  */
 
+// Activar playoffs y guardar los equipos que van a playoffs
+router.put('/:id/playoffs', protect, TorneoController.playoffs);
+// Obtener los playoffs de un torneo
+router.get('/:id/playoffs', protect, TorneoController.getPlayoffs);
+// Agregar un equipo a los playoffs
+router.post('/:id/playoffs/equipo', protect, TorneoController.addEquipoPlayoffs);
+router.delete('/:id/playoffs/equipo/:equipoId', protect, TorneoController.removeEquipoPlayoffs);
+// Crear cruces
+router.post('/:id/playoffs/cruces', protect, TorneoController.createCruces);
 export default router;

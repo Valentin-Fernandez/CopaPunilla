@@ -25,7 +25,7 @@ export default class PartidoRepository {
         }
     }
 
-    static async create(partido, torneoId) {
+    static async create(partido, torneoId, esPlayoff = false) {
         try {
             const partidoData = {
                 ...partido,
@@ -35,7 +35,10 @@ export default class PartidoRepository {
             if (!newPartido) {
                 throw new Error('Error al crear el partido');
             }
-            TorneoRepository.update(torneoId, { $push: { partidos: newPartido._id } });
+            if (!esPlayoff) {
+                await TorneoRepository.update(torneoId, { $push: { partidos: newPartido._id } });
+            }
+            return newPartido;
         } catch (error) {
             throw new Error(`Error al crear el partido: ${error}`);
         }

@@ -77,4 +77,55 @@ export default class TorneoController {
             res.status(404).json({ error: error.message });
         }
     }
+
+    static async playoffs(req, res) {
+        try {
+            const { id } = req.params;
+            const torneoReq = req.body;
+            const torneo = await TorneoRepository.playoffs(id, torneoReq);
+            res.json(torneo);
+        } catch (error) {
+            res.status(400).json({ error: error.message });
+        }
+    }
+
+    static async getPlayoffs(req, res) {
+        try {
+            const { id } = req.params;
+            const torneoPlayoffs = await TorneoRepository.getPlayoffs(id);
+            res.json(torneoPlayoffs);
+        } catch (error) {
+            res.status(404).json({ error: error.message });
+        }
+    }
+
+    static async addEquipoPlayoffs(req, res) {
+        try {
+            const { id } = req.params;
+            const { equipoId } = req.body;
+            await TorneoRepository.addEquipoPlayoffs(id, equipoId);
+            res.json({ message: 'Equipo agregado correctamente a los playoffs' });
+        } catch (error) {
+            res.status(400).json({ error: error.message });
+        }
+    }
+
+    static async removeEquipoPlayoffs(req, res) {
+        try {
+            const { id, equipoId } = req.params;
+            await TorneoRepository.removeEquipoPlayoffs(id, equipoId);
+            res.json({ message: 'Equipo eliminado correctamente de los playoffs' });
+        } catch (error) {
+            res.status(400).json({ error: error.message });
+        }
+    }
+
+    static async createCruces(req, res) {
+        try {
+            const { id } = req.params;
+            await TorneoRepository.createCruces(id);
+        } catch (error) {
+            res.status(400).json({ error: error.message });
+        }
+    }
 }
