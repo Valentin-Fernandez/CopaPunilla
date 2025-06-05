@@ -4,6 +4,7 @@ import Encuentros from '../components/Encuentros.js';
 import Footer from '../components/Footer.js';
 import TorneoService from '../service/TorneoService.js';
 import { useEffect, useState } from 'react';
+import Playoffs from '../features/home/Playoffs.js';
 
 const Home = () => {
     const [torneo, setTorneo] = useState(null);
@@ -21,6 +22,11 @@ const Home = () => {
 
     return (
         <div className="">
+            {torneo && (
+                <div className="container mx-auto p-8 ">
+                    <Playoffs partidos={torneo.faseEliminatoria.partidosEliminacion} />
+                </div>
+            )}
             <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 items-center md:my-20 my-10">
                 {/* Tabla principal (ocupa 2 columnas en pantallas medianas y grandes) */}
                 {torneo && (

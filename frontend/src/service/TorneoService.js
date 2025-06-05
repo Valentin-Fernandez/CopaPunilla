@@ -54,6 +54,41 @@ const TorneoService = {
             throw error;
         }
     },
+
+    getDetalles: async id => {
+        try {
+            const response = await axios.get(`${API_URL}/detalles/${id}`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    activarPlayoffs: async (id, torneo) => {
+        try {
+            const response = await axios.put(`${API_URL}/${id}/playoffs`, torneo);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    getPlayoffs: async id => {
+        try {
+            const response = await axios.get(`${API_URL}/${id}/playoffs`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    deleteEquipoPlayoffs: async (id, equipoId) => {
+        try {
+            await axios.delete(`${API_URL}/${id}/playoffs/equipo/${equipoId}`);
+        } catch (error) {
+            throw error;
+        }
+    },
 };
 
 export default TorneoService;
