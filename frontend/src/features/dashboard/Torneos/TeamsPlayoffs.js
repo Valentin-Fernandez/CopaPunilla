@@ -46,7 +46,7 @@ const TeamsPlayoffs = ({ teams, fetchPlayoffs }) => {
 
     return (
         <div className="">
-            <h2 className="text-2xl font-bold mb-4 text-primary">Equipos clasificados a Playoffs</h2>
+            <h2 className="text-2xl font-bold mb-4 text-primary text-center">Equipos clasificados a Playoffs</h2>
             {teams && (
                 <div>
                     {teams.length > 0 && (

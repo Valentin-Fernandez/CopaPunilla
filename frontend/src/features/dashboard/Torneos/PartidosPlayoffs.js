@@ -1,10 +1,26 @@
+import { useParams } from 'react-router-dom';
+import Button from '../../../components/Button.js';
+import TorneoService from '../../../service/TorneoService.js';
+
 const PartidosPlayoffs = ({ partidos }) => {
+    const { id } = useParams();
     const partidosCuartos = partidos.filter(p => p.ronda === 'cuartos');
     const partidosSemifinal = partidos.filter(p => p.ronda === 'semifinal');
 
+    const handleAvanzarFase = async id => {
+        try {
+            await TorneoService.avanzarFase(id);
+        } catch (error) {
+            console.error('Error al avanzar de fase', error);
+        }
+    };
+
     return (
         <div className="">
-            <h2 className="text-2xl font-bold mb-4 text-primary">Partidos de Playoffs</h2>
+            <h2 className="text-2xl font-bold mb-4 text-primary text-center">Partidos de Playoffs</h2>
+            <div className="flex justify-center mb-4">
+                <Button label={'Avanzar de fase'} color={'bg-secundaryDark'} textColor={'text-primary'} onClick={() => handleAvanzarFase(id)} />
+            </div>
             {partidos && partidos.length > 0 ? (
                 <div>
                     <h3 className="text-xl text-center text-primary font-semibold">Cuartos de final</h3>

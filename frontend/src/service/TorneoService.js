@@ -89,6 +89,14 @@ const TorneoService = {
             throw error;
         }
     },
+
+    avanzarFase: async idTorneo => {
+        try {
+            await axios.post(`${API_URL}/${idTorneo}/playoffs/cruces`);
+        } catch (error) {
+            throw error;
+        }
+    },
 };
 
 export default TorneoService;
