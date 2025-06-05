@@ -7,7 +7,7 @@ const Playoffs = ({ partidos }) => {
             <h2 className="text-2xl font-bold mb-4 text-secundary text-center">
                 Partidos de <span className="text-terciary">Playoffs</span>
             </h2>
-            {partidos && partidos.length > 0 ? (
+            {partidos && partidos.length > 0 && (
                 <div className="flex flex-col items-center justify-center">
                     <h3 className="text-xl text-center text-terciary font-semibold">Repechaje</h3>
                     {partidosCuartos.length > 0 ? (
@@ -56,8 +56,6 @@ const Playoffs = ({ partidos }) => {
                         </div>
                     )}
                 </div>
-            ) : (
-                <p> 'HOla </p>
             )}
         </div>
     );

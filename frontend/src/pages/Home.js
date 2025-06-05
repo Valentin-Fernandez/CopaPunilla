@@ -22,7 +22,7 @@ const Home = () => {
 
     return (
         <div className="">
-            {torneo && (
+            {torneo.faseEliminatoria.activo && (
                 <div className="container mx-auto p-8 ">
                     <Playoffs partidos={torneo.faseEliminatoria.partidosEliminacion} />
                 </div>
