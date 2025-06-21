@@ -124,6 +124,7 @@ export default class TorneoController {
         try {
             const { id } = req.params;
             await TorneoRepository.createCruces(id);
+            res.json({ message: 'Cruces creados correctamente' });
         } catch (error) {
             res.status(400).json({ error: error.message });
         }

@@ -29,7 +29,7 @@ export default class TorneoDAO {
             .populate({ path: 'partidos', select: 'equipoLocal equipoVisitante golesLocal golesVisitante fecha fechaLiga estado' })
             .populate({
                 path: 'faseEliminatoria.partidosEliminacion.partido',
-                select: 'equipoLocal equipoVisitante golesLocal golesVisitante estado',
+                select: 'equipoLocal equipoVisitante golesLocal golesVisitante estado fecha',
                 populate: [
                     { path: 'equipoLocal', select: 'nombre' },
                     { path: 'equipoVisitante', select: 'nombre' },

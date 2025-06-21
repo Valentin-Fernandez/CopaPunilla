@@ -54,7 +54,8 @@ export default class PartidoController {
 
     static async finalizar(req, res) {
         try {
-            const partido = await PartidoRepository.finalizar(req.params.id, req.body);
+            const { fase, ...partidoBody } = req.body;
+            const partido = await PartidoRepository.finalizar(req.params.id, partidoBody, fase);
             res.status(200).json(partido);
         } catch (error) {
             res.status(400).json({ message: error.message });

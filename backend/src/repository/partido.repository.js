@@ -68,72 +68,79 @@ export default class PartidoRepository {
         }
     }
 
-    static async finalizar(id, partidoBody) {
+    static async finalizar(id, partidoBody, fase = 'liga') {
         try {
             // 1- Buscar el partido
             const findPartido = await PartidoDAO.getById(id);
             if (!findPartido) {
                 throw new Error('Partido no encontrado');
             }
-            console.log('Partido encontrado:', findPartido);
-            // 3- Buscar los equipos
-            const equipoLocal = await EquipoRepository.getById({ _id: findPartido.equipoLocal });
-            if (!equipoLocal) {
-                throw new Error('Equipo local no encontrado');
-            }
-            const equipoVisitante = await EquipoRepository.getById({ _id: findPartido.equipoVisitante });
-            if (!equipoVisitante) {
-                throw new Error('Equipo visitante no encontrado');
-            }
 
-            // 4 - Actualizo estadisticas
-            equipoLocal.estadisticas.golesFavor += partidoBody.golesLocal;
-            equipoLocal.estadisticas.golesContra += partidoBody.golesVisitante;
-            equipoLocal.estadisticas.partidosJugados += 1;
-            equipoVisitante.estadisticas.golesFavor += partidoBody.golesVisitante;
-            equipoVisitante.estadisticas.golesContra += partidoBody.golesLocal;
-            equipoVisitante.estadisticas.partidosJugados += 1;
-            equipoLocal.estadisticas.diferenciaGoles = equipoLocal.estadisticas.golesFavor - equipoLocal.estadisticas.golesContra;
-            equipoVisitante.estadisticas.diferenciaGoles = equipoVisitante.estadisticas.golesFavor - equipoVisitante.estadisticas.golesContra;
+            let equipoLocal, equipoVisitante;
 
-            // 5 - Calcular quien gano y asignarle los puntos
-            console.log();
-            if (partidoBody.golesLocal > partidoBody.golesVisitante) {
-                equipoLocal.estadisticas.puntos += 2;
-                equipoLocal.estadisticas.partidosGanados += 1;
-                equipoVisitante.estadisticas.partidosPerdidos += 1;
-            } else if (partidoBody.golesLocal < partidoBody.golesVisitante) {
-                equipoVisitante.estadisticas.puntos += 2;
-                equipoVisitante.estadisticas.partidosGanados += 1;
-                equipoLocal.estadisticas.partidosPerdidos += 1;
-            } else {
-                equipoLocal.estadisticas.puntos += 1;
-                equipoVisitante.estadisticas.puntos += 1;
-                equipoLocal.estadisticas.partidosEmpatados += 1;
-                equipoVisitante.estadisticas.partidosEmpatados += 1;
-            }
-
-            // 7 - Estadisticas de jugador
-            for (const estadistica of partidoBody.estadisticas) {
-                const jugador = await JugadorRepository.getById(estadistica.jugador);
-                if (!jugador) {
-                    throw new Error('Jugador no encontrado');
+            if (fase === 'liga') {
+                // 3- Buscar los equipos
+                equipoLocal = await EquipoRepository.getById({ _id: findPartido.equipoLocal });
+                if (!equipoLocal) {
+                    throw new Error('Equipo local no encontrado');
+                }
+                equipoVisitante = await EquipoRepository.getById({ _id: findPartido.equipoVisitante });
+                if (!equipoVisitante) {
+                    throw new Error('Equipo visitante no encontrado');
                 }
 
-                // Actualizar estadísticas generales del jugador
-                if (estadistica.amarilla > 1 || estadistica.roja > 0) {
-                    jugador.estadisticas.tarjetasRojas += estadistica.roja || 0;
-                    jugador.estadisticas.tarjetasAmarillas += estadistica.amarilla || 0;
+                // 4 - Actualizo estadisticas
+                equipoLocal.estadisticas.golesFavor += partidoBody.golesLocal;
+                equipoLocal.estadisticas.golesContra += partidoBody.golesVisitante;
+                equipoLocal.estadisticas.partidosJugados += 1;
+                equipoVisitante.estadisticas.golesFavor += partidoBody.golesVisitante;
+                equipoVisitante.estadisticas.golesContra += partidoBody.golesLocal;
+                equipoVisitante.estadisticas.partidosJugados += 1;
+                equipoLocal.estadisticas.diferenciaGoles = equipoLocal.estadisticas.golesFavor - equipoLocal.estadisticas.golesContra;
+                equipoVisitante.estadisticas.diferenciaGoles = equipoVisitante.estadisticas.golesFavor - equipoVisitante.estadisticas.golesContra;
+
+                // 5 - Calcular quien gano y asignarle los puntos
+
+                if (partidoBody.golesLocal > partidoBody.golesVisitante) {
+                    equipoLocal.estadisticas.puntos += 2;
+                    equipoLocal.estadisticas.partidosGanados += 1;
+                    equipoVisitante.estadisticas.partidosPerdidos += 1;
+                } else if (partidoBody.golesLocal < partidoBody.golesVisitante) {
+                    equipoVisitante.estadisticas.puntos += 2;
+                    equipoVisitante.estadisticas.partidosGanados += 1;
+                    equipoLocal.estadisticas.partidosPerdidos += 1;
                 } else {
-                    jugador.estadisticas.tarjetasAmarillas += estadistica.amarilla || 0;
+                    equipoLocal.estadisticas.puntos += 1;
+                    equipoVisitante.estadisticas.puntos += 1;
+                    equipoLocal.estadisticas.partidosEmpatados += 1;
+                    equipoVisitante.estadisticas.partidosEmpatados += 1;
                 }
-                if (estadistica.goles && estadistica.goles > 0) {
-                    jugador.estadisticas.goles += estadistica.goles;
-                }
-
-                // Guardar las estadísticas actualizadas del jugador
-                await JugadorRepository.update(jugador._id, jugador);
             }
+
+            if (fase === 'liga' || fase === 'semifinal' || fase === 'final') {
+                // 7 - Estadisticas de jugador
+                for (const estadistica of partidoBody.estadisticas) {
+                    const jugador = await JugadorRepository.getById(estadistica.jugador);
+                    if (!jugador) {
+                        throw new Error('Jugador no encontrado');
+                    }
+
+                    // Actualizar estadísticas generales del jugador
+                    if (estadistica.amarilla > 1 || estadistica.roja > 0) {
+                        jugador.estadisticas.tarjetasRojas += estadistica.roja || 0;
+                        jugador.estadisticas.tarjetasAmarillas += estadistica.amarilla || 0;
+                    } else {
+                        jugador.estadisticas.tarjetasAmarillas += estadistica.amarilla || 0;
+                    }
+                    if (estadistica.goles && estadistica.goles > 0) {
+                        jugador.estadisticas.goles += estadistica.goles;
+                    }
+
+                    // Guardar las estadísticas actualizadas del jugador
+                    await JugadorRepository.update(jugador._id, jugador);
+                }
+            }
+
             // 8 - Finalizar partido
             const partidoFinish = {
                 ...findPartido.toObject(),
@@ -144,11 +151,31 @@ export default class PartidoRepository {
             };
 
             // Hacer todas las escrituras/modificaciones en la base de datos
-            const [partidoActualizado] = await Promise.all([
-                PartidoDAO.update(id, partidoFinish),
-                EquipoRepository.update(equipoLocal._id, equipoLocal),
-                EquipoRepository.update(equipoVisitante._id, equipoVisitante),
-            ]);
+            let partidoActualizado;
+            if (fase === 'liga') {
+                [partidoActualizado] = await Promise.all([
+                    PartidoDAO.update(id, partidoFinish),
+                    EquipoRepository.update(equipoLocal._id, equipoLocal),
+                    EquipoRepository.update(equipoVisitante._id, equipoVisitante),
+                ]);
+            } else {
+                partidoActualizado = await PartidoDAO.update(id, partidoFinish);
+            }
+
+            if (fase === 'final') {
+                let campeon;
+                let subcampeon;
+                if (partidoFinish.golesLocal > partidoFinish.golesVisitante) {
+                    campeon = equipoLocal._id;
+                    subcampeon = equipoVisitante._id;
+                } else {
+                    campeon = equipoVisitante._id;
+                    subcampeon = equipoLocal._id;
+                }
+
+                // Actualizar el torneo con el campeón y subcampeón
+                await TorneoRepository.update(partidoFinish.torneo, { campeon: campeon, subcampeon: subcampeon, estado: 'finalizado' });
+            }
 
             return partidoActualizado;
         } catch (error) {

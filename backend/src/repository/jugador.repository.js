@@ -25,7 +25,7 @@ export default class JugadorRepository {
     static async create(jugador) {
         try {
             const newJugador = await JugadorDAO.create(jugador);
-            console.log('newJugador', newJugador);
+
             if (!jugador) {
                 throw new Error(`Error al crear el jugador`);
             }

@@ -117,10 +117,13 @@ export default class TorneoRepository {
 
     static async playoffs(id, torneo) {
         try {
+            // Ordenar equipos clasificados por Posicion
+            let equiposClasificados = torneo.faseEliminatoria.equiposClasificados.sort((a, b) => a.posicion - b.posicion).map((e, index) => ({ ...e, posicion: index + 1 }));
+
             const torneoUpdate = await TorneoDAO.update(id, {
                 $set: {
                     'faseEliminatoria.activo': torneo.faseEliminatoria.activo,
-                    'faseEliminatoria.equiposClasificados': torneo.faseEliminatoria.equiposClasificados,
+                    'faseEliminatoria.equiposClasificados': equiposClasificados,
                 },
             });
 
@@ -200,9 +203,12 @@ export default class TorneoRepository {
                 throw new Error('Los playoffs no están activos');
             }
             const equiposClasificados = torneo.faseEliminatoria.equiposClasificados;
+
             // 1. Tomar los partidos por Ronda
             const partidosEliminacion = torneo.faseEliminatoria.partidosEliminacion;
-            const cuartos = partidosEliminacion.filter(p => p.ronda === 'cuartos');
+
+            const cuartos = partidosEliminacion.filter(p => p.ronda === 'repechaje');
+
             const semifinales = partidosEliminacion.filter(p => p.ronda === 'semifinal');
             const final = partidosEliminacion.filter(p => p.ronda === 'final');
             // 2. Crear los cruces
@@ -210,15 +216,16 @@ export default class TorneoRepository {
             // Cuartos de final
             if (cuartos.length === 0) {
                 // Buscar el equipo de la 3era posicion y 6ta posicion
-                console.log('Creando cruces de cuartos de final');
+
                 const equipo3 = equiposClasificados.find(e => e.posicion === 3);
 
                 const equipo6 = equiposClasificados.find(e => e.posicion === 6);
+
                 const primerCruce = {
                     equipoLocal: String(equipo3.equipo._id),
                     equipoVisitante: String(equipo6.equipo._id),
                 };
-                console.log('Primer cruce:', primerCruce);
+
                 // Buscar el equipo de la 4ta posicion y 5ta posicion
                 const equipo4 = equiposClasificados.find(e => e.posicion === 4);
                 const equipo5 = equiposClasificados.find(e => e.posicion === 5);
@@ -226,14 +233,18 @@ export default class TorneoRepository {
                     equipoLocal: String(equipo4.equipo._id),
                     equipoVisitante: String(equipo5.equipo._id),
                 };
-                console.log('Segundo cruce:', segundoCruce);
+
                 // Crear los partidos de cuartos
                 const partido1 = await PartidoRepository.create(primerCruce, idTorneo, true);
                 const partido2 = await PartidoRepository.create(segundoCruce, idTorneo, true);
-                console.log('Partidos de cuartos creados:', partido1);
 
                 // Actualizar los partidos de la fase eliminatoria
-                torneo.faseEliminatoria.partidosEliminacion.push({ ronda: 'cuartos', partido: partido1._id }, { ronda: 'cuartos', partido: partido2._id });
+                torneo.faseEliminatoria.partidosEliminacion.push(
+                    ...[
+                        { ronda: 'repechaje', partido: partido1._id },
+                        { ronda: 'repechaje', partido: partido2._id },
+                    ],
+                );
 
                 await torneo.save();
                 return;
@@ -242,12 +253,15 @@ export default class TorneoRepository {
             // Semifinal
             // Validar si los cuartos de final ya fueron jugados
             const cuartosJugados = cuartos.every(p => p.partido.estado === 'finalizado');
+
             if (cuartosJugados && semifinales.length === 0) {
                 // Averiguar quien gano en cada cruce
+
                 const cruce1 = cuartos[0].partido;
                 const cruce2 = cuartos[1].partido;
-                const ganadorCruce1 = null;
-                const ganadorCruce2 = null;
+                let ganadorCruce1 = null;
+                let ganadorCruce2 = null;
+
                 if (cruce1.golesLocal > cruce1.golesVisitante) {
                     ganadorCruce1 = cruce1.equipoLocal;
                 } else ganadorCruce1 = cruce1.equipoVisitante;
@@ -257,13 +271,15 @@ export default class TorneoRepository {
 
                 // Crear los partidos de semifinal
                 const equipo1 = equiposClasificados.find(e => e.posicion === 1);
+
                 const equipo2 = equiposClasificados.find(e => e.posicion === 2);
+
                 const semifinal1 = {
-                    equipoLocal: equipo1,
+                    equipoLocal: equipo1.equipo._id,
                     equipoVisitante: ganadorCruce2,
                 };
                 const semifinal2 = {
-                    equipoLocal: equipo2,
+                    equipoLocal: equipo2.equipo._id,
                     equipoVisitante: ganadorCruce1,
                 };
 
@@ -271,6 +287,54 @@ export default class TorneoRepository {
                 const partido2 = await PartidoRepository.create(semifinal2, idTorneo, true);
                 // Actualizar los partidos de la fase eliminatoria
                 torneo.faseEliminatoria.partidosEliminacion.push({ ronda: 'semifinal', partido: partido1._id }, { ronda: 'semifinal', partido: partido2._id });
+                await torneo.save();
+                return;
+            }
+
+            // Final
+            // Validar si las semifinales ya fueron jugadas
+            const semifinalesJugadas = semifinales.every(p => p.partido.estado === 'finalizado');
+
+            if (semifinalesJugadas && final.length === 0) {
+                // 1- Averiguar quien gano en cada semifinal
+                const semifinal1 = semifinales[0].partido;
+                const semifinal2 = semifinales[1].partido;
+
+                let ganadorSemifinal1 = null;
+                let ganadorSemifinal2 = null;
+                let perdedorSemifinal1 = null;
+                let perdedorSemifinal2 = null;
+                if (semifinal1.golesLocal > semifinal1.golesVisitante) {
+                    ganadorSemifinal1 = semifinal1.equipoLocal;
+                    perdedorSemifinal1 = semifinal1.equipoVisitante;
+                } else {
+                    ganadorSemifinal1 = semifinal1.equipoVisitante;
+                    perdedorSemifinal1 = semifinal1.equipoLocal;
+                }
+
+                if (semifinal2.golesLocal > semifinal2.golesVisitante) {
+                    ganadorSemifinal2 = semifinal2.equipoLocal;
+                    perdedorSemifinal2 = semifinal2.equipoVisitante;
+                } else {
+                    ganadorSemifinal2 = semifinal2.equipoVisitante;
+                    perdedorSemifinal2 = semifinal2.equipoLocal;
+                }
+                // 2- Crear el partido de final
+                const partidoFinal = {
+                    equipoLocal: ganadorSemifinal1._id,
+                    equipoVisitante: ganadorSemifinal2._id,
+                };
+
+                // 3- Crear el partido de 3er y 4to puesto
+                const partidoTercerPuesto = {
+                    equipoLocal: perdedorSemifinal1._id,
+                    equipoVisitante: perdedorSemifinal2._id,
+                };
+
+                const partido = await PartidoRepository.create(partidoFinal, idTorneo, true);
+                const partidoTercer = await PartidoRepository.create(partidoTercerPuesto, idTorneo, true);
+                // 3- Actualizar los partidos de la fase eliminatoria
+                torneo.faseEliminatoria.partidosEliminacion.push({ ronda: 'final', partido: partido._id }, { ronda: 'tercer puesto', partido: partidoTercer._id });
                 await torneo.save();
                 return;
             }
