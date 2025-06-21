@@ -10,12 +10,12 @@ const Playoffs = ({ partidos }) => {
                 Partidos de <span className="text-terciary">Playoffs</span>
             </h2>
             {partidos && partidos.length > 0 && (
-                <div className="flex items-center justify-center">
+                <div className="flex flex-col md:flex-row items-center justify-center">
                     {partidosCuartos.length > 0 ? (
                         <div className="flex flex-col">
                             <h3 className="text-xl text-center text-terciary font-semibold">Repechaje</h3>
                             {partidosCuartos.map(p => (
-                                <div className="bg-secundaryDark m-4 py-4 px-8 rounded-md text-primary space-x-6 items-center justify-between flex ">
+                                <div className="bg-secundaryDark m-2 w-64 h-24 p-8 rounded-md text-primary space-x-6 items-center justify-between flex ">
                                     <div className="text-lg">
                                         <p>{p.partido.equipoLocal.nombre}</p>
                                         <p>{p.partido.equipoVisitante.nombre}</p>
@@ -36,7 +36,7 @@ const Playoffs = ({ partidos }) => {
                         <div className="flex flex-col">
                             <h3 className="text-xl text-center text-terciary font-semibold">Semifinal</h3>
                             {partidosSemifinal.map(p => (
-                                <div className="bg-secundaryDark m-4 py-4 px-8 rounded-md text-primary space-x-6 items-center justify-between flex " key={p.partido._id}>
+                                <div className="bg-secundaryDark m-2 w-64 h-24 p-8 rounded-md text-primary space-x-6 items-center justify-between flex " key={p.partido._id}>
                                     <div className="text-lg">
                                         <p>{p.partido.equipoLocal.nombre}</p>
                                         <p>{p.partido.equipoVisitante.nombre}</p>
@@ -58,10 +58,10 @@ const Playoffs = ({ partidos }) => {
                             {partidosTercerPuesto.length > 0 ? (
                                 <div className="flex flex-col">
                                     <h3 className="text-xl text-center text-terciary font-semibold">Tercer puesto</h3>
-                                    <div className="text-center text-secundary font-semibold text-sm mb-4">
+                                    <div className="text-center text-secundary font-semibold text-sm">
                                         <p>{new Date(partidosTercerPuesto[0].partido.fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' })}</p>
                                     </div>
-                                    <div className="bg-secundaryDark m-4 py-4 px-8 rounded-md text-primary space-x-6 items-center justify-between flex" key={partidosTercerPuesto[0].partido._id}>
+                                    <div className="bg-secundaryDark m-2 w-64 h-24 p-8 rounded-md text-primary space-x-6 items-center justify-between flex" key={partidosTercerPuesto[0].partido._id}>
                                         <div className="text-lg">
                                             <p>{partidosTercerPuesto[0].partido.equipoLocal.nombre}</p>
                                             <p>{partidosTercerPuesto[0].partido.equipoVisitante.nombre}</p>
@@ -83,11 +83,11 @@ const Playoffs = ({ partidos }) => {
                         <div className="flex flex-col">
                             <h3 className="text-xl text-center text-terciary font-semibold">Final</h3>
                             {/* Dia y hora */}
-                            <div className="text-center text-terciary font-semibold mb-4">
+                            <div className="text-center text-secundary font-semibold text-sm">
                                 <p>{new Date(partidoFinal[0].partido.fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' })}</p>
                             </div>
                             {partidoFinal.map(p => (
-                                <div className="bg-secundaryDark m-4 py-4 px-8 rounded-md text-primary space-x-6 items-center justify-between flex" key={p.partido._id}>
+                                <div className="bg-secundaryDark m-2 w-64 h-24 p-8 rounded-md text-primary space-x-6 items-center justify-between flex" key={p.partido._id}>
                                     <div className="text-lg">
                                         <p>{p.partido.equipoLocal.nombre}</p>
                                         <p>{p.partido.equipoVisitante.nombre}</p>
