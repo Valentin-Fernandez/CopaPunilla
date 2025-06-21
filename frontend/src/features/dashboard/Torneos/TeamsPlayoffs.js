@@ -11,6 +11,8 @@ const TeamsPlayoffs = ({ teams, fetchPlayoffs }) => {
     const [teamSelected, setTeamSelected] = useState(null);
     const [confirmModal, setConfirmModal] = useState(false);
 
+    const teamsSorted = teams ? [...teams].sort((a, b) => a.posicion - b.posicion) : [];
+
     const handleClick = id => {
         setTeamSelected(id);
         setConfirmModal(true);
@@ -47,11 +49,11 @@ const TeamsPlayoffs = ({ teams, fetchPlayoffs }) => {
     return (
         <div className="">
             <h2 className="text-2xl font-bold mb-4 text-primary text-center">Equipos clasificados a Playoffs</h2>
-            {teams && (
+            {teamsSorted && (
                 <div>
-                    {teams.length > 0 && (
+                    {teamsSorted.length > 0 && (
                         <div className="">
-                            {teams.map(equipos => (
+                            {teamsSorted.map(equipos => (
                                 <div className="bg-secundaryDark m-4 flex p-3 rounded-md text-primary space-x-2 items-center justify-between">
                                     <div className="flex space-x-2 items-center">
                                         <p className="font-bold text-xl text-terciary">{equipos.posicion}</p>

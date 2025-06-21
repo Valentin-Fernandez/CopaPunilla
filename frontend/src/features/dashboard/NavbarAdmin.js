@@ -12,6 +12,9 @@ const NavbarAdmin = () => {
         <nav className="bg-primary p-4 shadow-md">
             <div className="container mx-auto flex justify-between items-center">
                 <img src={Logo} className="w-10"></img>
+                <a href="/" className="md:block hidden text-secundary text-lg font-bold border-b border-terciary">
+                    Inicio
+                </a>
                 <div className="text-secundary text-2xl font-bold">Dashboard</div>
                 <div className="md:hidden">
                     <button onClick={toggleMenu} className="text-secundary focus:outline-none">

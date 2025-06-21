@@ -27,7 +27,7 @@ const PlayoffsDetails = () => {
     return (
         <div className="bg-terciary rounded-md p-8 mb-6 md:flex justify-around items-center">
             {playoffs && <TeamsPlayoffs teams={playoffs.faseEliminatoria.equiposClasificados} fetchPlayoffs={fetchPlayoffs} />}
-            {playoffs && <PartidosPlayoffs partidos={playoffs.faseEliminatoria.partidosEliminacion} />}
+            {playoffs && <PartidosPlayoffs partidos={playoffs.faseEliminatoria.partidosEliminacion} onSuccess={() => fetchPlayoffs(id)} />}
             {loading && <Loading />}
         </div>
     );

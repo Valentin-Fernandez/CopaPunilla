@@ -49,10 +49,13 @@ const PlayoffsSelect = ({ isOpen, onClose, onPlayoffsActivated }) => {
         }
 
         try {
-            const equiposClasificados = seleccionados.map((equipoId, index) => ({
-                equipo: equipoId,
-                posicion: index + 1,
-            }));
+            const equiposClasificados = seleccionados.map(equipoId => {
+                const index = torneo.equipos.findIndex(equipo => equipo._id === equipoId);
+                return {
+                    equipo: equipoId,
+                    posicion: index + 1,
+                };
+            });
             const torneoData = {
                 faseEliminatoria: {
                     activo: true,

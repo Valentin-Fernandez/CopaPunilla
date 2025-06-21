@@ -28,9 +28,9 @@ const PartidoService = {
         }
     },
 
-    finalizar: async (id, partido) => {
+    finalizar: async (id, partido, fase) => {
         try {
-            await axios.post(`${API_URL}/partidos/${id}/finalizar`, partido);
+            await axios.post(`${API_URL}/partidos/${id}/finalizar`, { ...partido, fase });
         } catch (error) {
             throw error;
         }

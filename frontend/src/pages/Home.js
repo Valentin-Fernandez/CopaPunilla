@@ -22,12 +22,12 @@ const Home = () => {
 
     return (
         <div className="">
-            {torneo && (
-                <div className="container mx-auto p-8 ">
+            {torneo && torneo.faseEliminatoria && torneo.faseEliminatoria.activo && (
+                <div className="container mx-auto px-8">
                     <Playoffs partidos={torneo.faseEliminatoria.partidosEliminacion} />
                 </div>
             )}
-            <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 items-center md:my-20 my-10">
+            <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 items-center my-10">
                 {/* Tabla principal (ocupa 2 columnas en pantallas medianas y grandes) */}
                 {torneo && (
                     <div className="md:col-span-2">

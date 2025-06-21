@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import PartidoService from '../../../service/PartidoService.js';
 import EquipoService from '../../../service/EquipoService.js';
 import FormStats from './FormStats.js';
@@ -17,6 +17,9 @@ const ResultadoDetails = () => {
     const [jugadorSeleccionado, setJugadorSeleccionado] = useState(null); // Jugador seleccionado
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const fase = queryParams.get('fase') || 'liga'; // Obtener el parámetro de fase
 
     const fetchPartido = async () => {
         try {
@@ -96,7 +99,7 @@ const ResultadoDetails = () => {
                     roja,
                 })),
             };
-            await PartidoService.finalizar(id, resultado);
+            await PartidoService.finalizar(id, resultado, fase);
             toast.success('Partido realizado correctamente', {
                 position: 'bottom-left',
                 autoClose: 2000,
